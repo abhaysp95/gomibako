@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// holds application-wide dependencies
 type application struct {
 	infoLog *log.Logger
 	errLog *log.Logger
@@ -21,15 +22,7 @@ func main() {
 
 	app := &application { infoLog, errLog }
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", app.home)
-	mux.HandleFunc("/gomi", app.showGomi)
-	mux.HandleFunc("/gomi/create", app.createGomi)
-
-	// file server to serve static files
-	fileServer := http.FileServer(http.Dir("./ui/static"))
-
-	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+	mux := app.routes()
 
 	srv := http.Server {
 		Addr: *addr,
