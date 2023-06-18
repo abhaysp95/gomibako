@@ -2,13 +2,12 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 	"text/template"
 )
 
-func home(w http.ResponseWriter, r *http.Request) {
+func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return
@@ -22,20 +21,20 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
-		log.Println(err.Error())
+		app.errLog.Println(err.Error())
 		http.Error(w, "Internal Server Error", 500)
 		return
 	}
 
 	err = ts.Execute(w, nil)
 	if err != nil {
-		log.Println(err.Error())
+		app.errLog.Println(err.Error())
 		http.Error(w, "Internal Server Error", 500)
 	}
 }
 
 // handler to showing individual gomi
-func showGomi(w http.ResponseWriter, r *http.Request) {
+func (app *application) showGomi(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1 {
 		http.NotFound(w, r)
@@ -46,7 +45,7 @@ func showGomi(w http.ResponseWriter, r *http.Request) {
 }
 
 // handler to create new gomi
-func createGomi(w http.ResponseWriter, r *http.Request) {
+func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		w.Header().Set("Allow", "POST")
 		http.Error(w, "Method not supported", 405)
