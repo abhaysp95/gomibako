@@ -52,5 +52,16 @@ func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte("create gomi"))
+	title := "O snail"
+	content := "O snail\nClimb Mount Fuji\nBut slowly, slowly\n\n - Kobayashi"
+	expires := "5"
+
+	id, err := app.gomi.Create(title, content, expires)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	// redirect to see the gomi
+	http.Redirect(w, r, fmt.Sprintf("/gomi?id=%d", id), http.StatusSeeOther)
 }
