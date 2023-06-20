@@ -34,11 +34,10 @@ func (gm *GomiModel) Get(id int) (*models.Gomi, error) {
 	stmt := `select id, title, content, created, expires from gomi
 	where expires > utc_timestamp() and id = ?`
 
-	// return atmost on matching row
-	row := gm.DB.QueryRow(stmt, id)
-
 	g := &models.Gomi{}
-	if err := row.Scan(&g.Id, &g.Title, &g.Content, &g.Created, &g.Expires); err != nil {
+
+	// return atmost on matching row
+	if err := gm.DB.QueryRow(stmt, id).Scan(&g.Id, &g.Title, &g.Content, &g.Created, &g.Expires); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, models.ErrNoRecord
 		} else {
