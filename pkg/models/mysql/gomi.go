@@ -7,7 +7,7 @@ import (
 )
 
 type GomiModel struct {
-	DB *sql.DB
+	DB *sql.DB  // db pool dependency injection
 }
 
 // create new gomi

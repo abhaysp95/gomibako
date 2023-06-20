@@ -8,21 +8,29 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/joho/godotenv"
+	"github.com/abhaysp95/gomibako/pkg/models/mysql"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
 // holds application-wide dependencies
 type application struct {
 	infoLog *log.Logger
 	errLog *log.Logger
+	gomi *mysql.GomiModel
 }
 
 func main() {
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errLog := log.New(os.Stdout, "ERR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
-	app := &application { infoLog, errLog }
+	app := &application {
+		infoLog: infoLog,
+		errLog: errLog,
+		gomi: &mysql.GomiModel{  // dependency injection
+			DB: nil,
+		},
+	}
 	err := godotenv.Load()
 	if err != nil {
 		app.errLog.Println("Error loading .env file")
@@ -52,6 +60,7 @@ func main() {
 	}
 
 	defer db.Close()
+	app.gomi.DB = db  // assign db pool
 
 	mux := app.routes()
 
