@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strconv"
 	"text/template"
+
+	"github.com/abhaysp95/gomibako/pkg/models"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +43,16 @@ func (app *application) showGomi(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "Show gomi with ID: %d...", id)
+	g, err := app.gomi.Get(id)
+	if err == models.ErrNoRecord {
+		app.notFound(w)
+		return
+	} else if err != nil {
+		app.serverError(w, err)
+	}
+
+	// snippet data as plain-text HTTP response body
+	fmt.Fprintf(w, "%v", g)
 }
 
 // handler to create new gomi
@@ -52,8 +63,8 @@ func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	title := "O snail"
-	content := "O snail\nClimb Mount Fuji\nBut slowly, slowly\n\n - Kobayashi"
+	title := "Title from Gomi appl."
+	content := "A small content\nJust for demonstration purpose\n\n - gomibako"
 	expires := "5"
 
 	id, err := app.gomi.Create(title, content, expires)
