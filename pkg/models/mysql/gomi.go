@@ -12,7 +12,21 @@ type GomiModel struct {
 
 // create new gomi
 func (gm *GomiModel) Create(title, content, expires string) (int, error) {
-	return 0, nil
+	stmt := `insert into gomi(title, content, created, expires)
+	values(?, ?, utc_timestamp(), date_add(utc_timestamp(), interval ? day))`
+
+	res, err := gm.DB.Exec(stmt, title, content, expires)
+	if err != nil {
+		return 0, err
+	}
+
+	// return the id of lastest created gomi
+	var id int64
+	if id, err = res.LastInsertId(); err != nil {
+		return 0, err
+	}
+
+	return int(id), nil
 }
 
 // get specific gomi
