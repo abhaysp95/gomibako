@@ -78,7 +78,7 @@ func main() {
 }
 
 func (app *application) openDB(dsn string) (*sql.DB, error)  {
-	db, err := sql.Open("mysql", dsn)
+	db, err := sql.Open("mysql", dsn + "?parseTime=true")
 	if err != nil {
 		return nil, err
 	}
