@@ -7,7 +7,7 @@ import (
 )
 
 type GomiModel struct {
-	DB *sql.DB  // db pool dependency injection
+	DB *sql.DB // db pool dependency injection
 }
 
 // create new gomi
@@ -50,5 +50,32 @@ func (gm *GomiModel) Get(id int) (*models.Gomi, error) {
 
 // 10 latest gomi
 func (gm *GomiModel) Latest() ([]*models.Gomi, error) {
-	return nil, nil
+	stmt := `select id, title, content, created, expires from gomi
+	where expires > utc_timestamp() order by created desc limit 10`
+
+	var gs []*models.Gomi
+
+	rows, err := gm.DB.Query(stmt)
+	if err != nil {
+		return nil, err
+	}
+
+	// CRUCIAL: if resultset is open, db connection can't be closed and thus
+	// pool will keep using the resource
+	defer rows.Close()
+
+	for rows.Next() {
+		g := &models.Gomi{}
+		if err = rows.Scan(&g.Id, &g.Title, &g.Content, &g.Created, &g.Expires); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, models.ErrNoRecord
+			} else {
+				return nil, err
+			}
+		}
+
+		gs = append(gs, g)
+	}
+
+	return gs, nil
 }

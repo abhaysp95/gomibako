@@ -19,6 +19,7 @@ header {
 section {
 	margin-top: 185px;
 	padding-left: 50px;
+	padding-right: 50px;
 	color: #ebdbb2;
 }
 
@@ -58,6 +59,24 @@ nav a:hover {
 	display: flex;
 	justify-content: center;
 	background-color: #136663;
+}
+
+.gomi {
+	display: grid;
+	grid-template-rows: [title-start] 15% [title-end] auto [ts-start] 10% [ts-end];
+	background: #42404f;
+}
+
+.gomi .metadata {
+	display: flex;
+	justify-content: space-between;
+	padding: 5px;
+	background: #32302f;
+}
+
+.gomi code {
+	color: #ebdbb2;
+	font-size: 1.05rem;
 }
 
 footer {

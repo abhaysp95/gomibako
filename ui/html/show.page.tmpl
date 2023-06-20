@@ -1,0 +1,21 @@
+{{template "base" .}}
+
+{{define "title"}}Gomi #{{.Id}}{{end}}
+
+{{define "body"}}
+<div class="gomi">
+	<div class="metadata">
+		<strong>{{.Title}}</strong>
+		<span>#{{.Id}}</span>
+	</div>
+	<pre>
+		<code>
+			{{.Content}}
+		</code>
+	</pre>
+	<div class="metadata">
+		<time>{{.Created}}</time>
+		<time>{{.Expires}}</time>
+	</div>
+</div>
+{{end}}

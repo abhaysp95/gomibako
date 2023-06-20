@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 	"strconv"
-	"text/template"
+
+	// "text/template"
 
 	"github.com/abhaysp95/gomibako/pkg/models"
 )
@@ -15,10 +17,18 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	/* gs, err := app.gomi.Latest()
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	for _, gomi := range(gs) {
+		fmt.Fprintf(w, "%v\n", gomi)
+	} */
+
 	files := []string{
 		"./ui/html/home.page.tmpl",
 		"./ui/html/base.layout.tmpl",
-		"./ui/html/footer.partial.tmpl",
 	}
 
 	ts, err := template.ParseFiles(files...)
@@ -51,8 +61,22 @@ func (app *application) showGomi(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 	}
 
-	// snippet data as plain-text HTTP response body
-	fmt.Fprintf(w, "%v", g)
+	files := []string {
+		"./ui/html/show.page.tmpl",
+		"./ui/html/base.layout.tmpl",
+	}
+
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		app.errLog.Println(err.Error())
+		app.serverError(w, err)
+		return
+	}
+
+	if err = ts.Execute(w, g); err != nil {
+		app.errLog.Println(err.Error())
+		app.serverError(w, err)
+	}
 }
 
 // handler to create new gomi
