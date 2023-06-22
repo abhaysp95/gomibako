@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 	"strconv"
 
@@ -17,33 +16,15 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	gs, err := app.gomi.Latest()
+	gl, err := app.gomi.Latest()
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
 
-	data := &templateData{
-		GomiList: gs,
-	}
-
-	files := []string{
-		"./ui/html/home.page.tmpl",
-		"./ui/html/base.layout.tmpl",
-	}
-
-	ts, err := template.ParseFiles(files...)
-	if err != nil {
-		app.errLog.Println(err.Error())
-		app.serverError(w, err)
-		return
-	}
-
-	err = ts.Execute(w, data)
-	if err != nil {
-		app.errLog.Println(err.Error())
-		app.serverError(w, err)
-	}
+	app.renderTemplate(w, r, "home", &templateData{
+		GomiList: gl,
+	})
 }
 
 // handler to showing individual gomi
@@ -62,26 +43,9 @@ func (app *application) showGomi(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 	}
 
-	files := []string {
-		"./ui/html/show.page.tmpl",
-		"./ui/html/base.layout.tmpl",
-	}
-
-	ts, err := template.ParseFiles(files...)
-	if err != nil {
-		app.errLog.Println(err.Error())
-		app.serverError(w, err)
-		return
-	}
-
-	data := &templateData {
+	app.renderTemplate(w, r, "show", &templateData{
 		Gomi: g,
-	}
-
-	if err = ts.Execute(w, data); err != nil {
-		app.errLog.Println(err.Error())
-		app.serverError(w, err)
-	}
+	})
 }
 
 // handler to create new gomi
