@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -18,6 +19,7 @@ type application struct {
 	infoLog *log.Logger
 	errLog *log.Logger
 	gomi *mysql.GomiModel
+	cache map[string]*template.Template
 }
 
 func main() {
@@ -61,6 +63,13 @@ func main() {
 
 	defer db.Close()
 	app.gomi.DB = db  // assign db pool
+
+	// get the template cache and inject it in application
+	templateCache, err := newTemplateCache("./ui/html")
+	if err != nil {
+		errLog.Fatal(err)
+	}
+	app.cache = templateCache
 
 	mux := app.routes()
 
