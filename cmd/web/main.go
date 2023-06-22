@@ -65,7 +65,7 @@ func main() {
 	app.gomi.DB = db  // assign db pool
 
 	// get the template cache and inject it in application
-	templateCache, err := newTemplateCache("./ui/html")
+	templateCache, err := newTemplateCache("./ui/html/")
 	if err != nil {
 		errLog.Fatal(err)
 	}

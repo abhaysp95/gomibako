@@ -25,7 +25,7 @@ func newTemplateCache(dir string) (map[string]*template.Template, error) {
 		name := filepath.Base(page)
 
 		// parse page template
-		ts, err := template.ParseFiles(name)
+		ts, err := template.ParseFiles(page)
 		if err != nil {
 			return nil, err
 		}

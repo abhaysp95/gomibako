@@ -22,7 +22,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.renderTemplate(w, r, "home", &templateData{
+	app.renderTemplate(w, r, "home.page.tmpl", &templateData{
 		GomiList: gl,
 	})
 }
@@ -43,7 +43,7 @@ func (app *application) showGomi(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 	}
 
-	app.renderTemplate(w, r, "show", &templateData{
+	app.renderTemplate(w, r, "show.page.tmpl", &templateData{
 		Gomi: g,
 	})
 }
