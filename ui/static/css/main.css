@@ -128,11 +128,21 @@ th, td {
 }
 
 footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
 	background: #32302f;
-	display: flex;
-	justify-content: flex-start;
-	padding-left: 50px;
 	font-size: 0.75rem;
+	padding: 5px;
+	text-align: center;
+	font-size: 1.1em;
+	color: var(--gomi_text);
+}
+
+footer > span {
+	color: var(--gomi_cyan);
+	font-size: 1.25em;
 }
 
 /* h1 a {
