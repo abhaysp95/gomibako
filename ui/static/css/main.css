@@ -112,7 +112,8 @@ th, td {
 .gomi {
 	display: grid;
 	grid-template-rows: [title-start] 15% [title-end] auto [ts-start] 10% [ts-end];
-	background: #42404f;
+	/* background: #42404f; */
+	border: 3px solid var(--gomi_dark_orange);
 }
 
 .gomi .metadata {
@@ -120,6 +121,14 @@ th, td {
 	justify-content: space-between;
 	padding: 5px;
 	background: #32302f;
+}
+
+.gomi .metadata:first-child {
+	border-bottom: 3px solid var(--gomi_dark_orange);
+}
+
+.gomi .metadata:last-child {
+	border-top: 3px solid var(--gomi_dark_orange);
 }
 
 .gomi code {
