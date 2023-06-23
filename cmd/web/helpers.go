@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"runtime/debug"
@@ -30,7 +31,13 @@ func (app *application) renderTemplate(w http.ResponseWriter, r *http.Request, n
 		return
 	}
 
-	if err := ts.Execute(w, td); err != nil {
+	// writing template to response in two stage, so that half cooked template
+	// (with error) is not shown to user
+	buf := new(bytes.Buffer)
+	if err := ts.Execute(buf, td); err != nil {
 		app.serverError(w, err)
+		return
 	}
+
+	buf.WriteTo(w)
 }
