@@ -8,6 +8,7 @@ import (
 )
 
 type templateData struct {
+	CurrentYear int
 	Gomi *models.Gomi
 	GomiList []*models.Gomi
 }
