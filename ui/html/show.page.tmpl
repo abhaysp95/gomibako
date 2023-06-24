@@ -15,8 +15,8 @@
 				</code>
 			</pre>
 			<div class="metadata">
-				<time>{{.Created}}</time>
-				<time>{{.Expires}}</time>
+				<time>{{.Created | humanizedDate}}</time>
+				<time>{{.Expires | humanizedDate}}</time>
 			</div>
 		</div>
 	{{end}}
