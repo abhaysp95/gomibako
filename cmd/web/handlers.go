@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
+	"unicode/utf8"
 
 	// "text/template"
 
@@ -55,6 +57,30 @@ func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
 	title := r.PostForm.Get("title")
 	content := r.PostForm.Get("content")
 	expires := r.PostForm.Get("expires")
+
+	errMap := make(map[string]string)
+
+	// validation for title
+	if strings.TrimSpace(title) == "" {
+		errMap["title"] = "Title can't be empty"
+	} else if utf8.RuneCountInString(title) > 100 {
+		errMap["title"] = "Title length can't be more than 100 characters"
+	}
+
+	// validation for content
+	if strings.TrimSpace("content") == "" {
+		errMap["content"] = "Content can't be empty"
+	}
+
+	// validation for expiry (just to be sure)
+	if strings.TrimSpace(expires) == "" {
+		errMap["expires"] = "Expiry duration can't be empty"
+	}
+
+	if len(errMap) > 0 {
+		fmt.Fprint(w, errMap)
+		return
+	}
 
 	id, err := app.gomi.Create(title, content, expires)
 	if err != nil {
