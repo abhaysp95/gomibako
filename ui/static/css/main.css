@@ -12,7 +12,8 @@
 
 html, body {
 	height: 100%;
-	font-family: 'Comic Neue', serif;
+	font-family: 'Comic Neue', 'serif';
+	text-transform: uppercase;
 	font-weight: 600;
 }
 
@@ -35,6 +36,7 @@ section {
 	padding-left: 50px;
 	padding-right: 50px;
 	color: var(--gomi_text);
+	max-height: 100%;
 }
 
 section h2 {
@@ -58,7 +60,7 @@ nav a {
 	color: var(--gomi_light_orange);
 	font-size: 1.25rem;
 	font-style: bold;
-	transition: transfrom 0.5s ease;
+	transition: transform 0.5s ease;
 }
 
 nav a:hover {
@@ -105,7 +107,8 @@ th, td {
 	background-color: var(--gomi_background);
 }
 
-.gomi_items td:first-child {
+.gomi_items td:first-child a {
+	text-decoration: none;
 	color: var(--gomi_light_aqua);
 }
 
@@ -131,9 +134,10 @@ th, td {
 	border-top: 3px solid var(--gomi_dark_orange);
 }
 
-.gomi code {
-	color: #ebdbb2;
-	font-size: 1.05rem;
+.gomi #content {
+	padding: 10px;
+	font-family: 'Comic Neue', 'serif';
+	font-weight: normal;
 }
 
 footer {
@@ -153,6 +157,57 @@ footer > a {
 	text-decoration: none;
 	color: var(--gomi_cyan);
 	font-size: 1.25em;
+}
+
+/* .create_gomi {
+	display: grid;
+	grid-template-rows: [row1-start] 20% [row2-start] 60% [row3-start] 8% [row3-end] auto [row-last];
+} */
+
+.create_gomi div {
+	padding-bottom: 20px;
+}
+
+.two_line label {
+	display: inline-block;
+	width: 100%;
+	padding-bottom: 10px;
+	font-size: 1.05rem;
+}
+
+.two_line input,textarea {
+	font-family: 'Comic Neue', 'serif';
+	display: inline-block;
+	width: 100%;
+	padding: 5px;
+	font-size: 1.25em;
+	background-color: var(--gomi_dark_gray);
+	color: var(--gomi_text);
+	box-sizing: border-box;
+	border: 3px solid var(--gomi_dark_orange);
+}
+
+.create_gomi_title input {
+	font-weight: 600;
+}
+
+.create_gomi_content textarea {
+	resize: none;
+	height: 150px;
+}
+
+.create_gomi_submit input {
+	font-size: 1.1rem;
+	background: var(--gomi_cyan);
+	padding: 10px;
+	border: 3px solid var(--gomi_dark_orange);
+	transition: transform 0.5s ease;
+	font-family: 'Comic Neue', 'serif';
+	font-weight: 900;
+}
+
+.create_gomi_submit input:hover {
+	transform: scale(1.15);
 }
 
 /* h1 a {

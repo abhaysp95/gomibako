@@ -14,7 +14,7 @@
 				</tr>
 			{{range .GomiList}}
 				<tr class="gomi_items">
-					<td>{{.Title}}</td>
+					<td><a href="/gomi?id={{.Id}}">{{.Title}}</a></td>
 					<td>{{.Created | humanizedDate}}</td>
 					<td>#{{.Id}}</td>
 				</tr>

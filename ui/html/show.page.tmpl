@@ -6,17 +6,13 @@
 	{{with .Gomi}}
 		<div class="gomi">
 			<div class="metadata">
-				<strong>{{.Title}}</strong>
-				<span>#{{.Id}}</span>
+				<strong id="title">{{.Title}}</strong>
+				<span id="id">#{{.Id}}</span>
 			</div>
-			<pre>
-				<code>
-					{{.Content}}
-				</code>
-			</pre>
+			<pre id="content"> {{.Content}} </pre>
 			<div class="metadata">
-				<time>{{.Created | humanizedDate}}</time>
-				<time>{{.Expires | humanizedDate}}</time>
+				<time id="created">{{.Created | humanizedDate}}</time>
+				<time id="expires">{{.Expires | humanizedDate}}</time>
 			</div>
 		</div>
 	{{end}}
