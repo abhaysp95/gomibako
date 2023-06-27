@@ -1,0 +1,26 @@
+{{template "base" .}}
+
+{{define "title"}}Create a New Snippet{{end}}
+
+{{define "body"}}
+<h2>Create a New Gomi</h2>
+<form class="create_gomi" action="/gomi/create" method="POST">
+	<div class="two_line create_gomi_title">
+		<label>Title</label>
+		<input type="text" name="title" />
+	</div>
+	<div class="two_line create_gomi_content">
+		<label>Content</label>
+		<textarea name="content"></textarea>
+	</div>
+	<div class="create_gomi_expires">
+		<label>Delete in:</label>
+		<input type="radio" name="expires" value="365" checked />One year
+		<input type="radio" name="expires" value="7" />One week
+		<input type="radio" name="expires" value="1" />One day
+	</div>
+	<div class="create_gomi_submit">
+		<input type="submit" value="Publish Gomi">
+	</div>
+</form>
+{{end}}
