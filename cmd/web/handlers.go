@@ -11,11 +11,6 @@ import (
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		http.NotFound(w, r)
-		return
-	}
-
 	gl, err := app.gomi.Latest()
 	if err != nil {
 		app.serverError(w, err)
@@ -31,6 +26,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 func (app *application) showGomi(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1 {
+		app.errLog.Println(err)
 		app.notFound(w)
 		return
 	}
@@ -50,15 +46,15 @@ func (app *application) showGomi(w http.ResponseWriter, r *http.Request) {
 
 // handler to create new gomi
 func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		w.Header().Set("Allow", "POST")
-		app.clientError(w, http.StatusMethodNotAllowed)
+	err := r.ParseForm()
+	if err != nil {
+		app.clientError(w, http.StatusBadRequest)
 		return
 	}
 
-	title := "Title from Gomi appl."
-	content := "A small content\nJust for demonstration purpose\n\n - gomibako"
-	expires := "5"
+	title := r.PostForm.Get("title")
+	content := r.PostForm.Get("content")
+	expires := r.PostForm.Get("expires")
 
 	id, err := app.gomi.Create(title, content, expires)
 	if err != nil {
@@ -68,4 +64,8 @@ func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
 
 	// redirect to see the gomi
 	http.Redirect(w, r, fmt.Sprintf("/gomi?id=%d", id), http.StatusSeeOther)
+}
+
+func (app *application) createGomiForm(w http.ResponseWriter, r *http.Request) {
+	app.renderTemplate(w, r, "create.page.tmpl", nil)
 }

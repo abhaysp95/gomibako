@@ -26,9 +26,9 @@ func (app *application) recoverPanic(next http.Handler) http.Handler {
 
 		// deferred function (will always run in case of panic, because go
 		// unwinds the stack in case of panic)
-		defer func () {
+		defer func() {
 			// if panic happened
-			if err := recover(); err != nil {  // err returned is interface{}
+			if err := recover(); err != nil { // err returned is interface{}
 				w.Header().Set("Connection", "close")
 				app.serverError(w, fmt.Errorf("%s", err))
 			}
