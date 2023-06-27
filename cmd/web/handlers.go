@@ -68,7 +68,7 @@ func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// validation for content
-	if strings.TrimSpace("content") == "" {
+	if strings.TrimSpace(content) == "" {
 		errMap["content"] = "Content can't be empty"
 	}
 
