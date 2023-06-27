@@ -78,7 +78,11 @@ func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(errMap) > 0 {
-		fmt.Fprint(w, errMap)
+		app.errLog.Println("validation error", errMap)
+		app.renderTemplate(w, r, "create.page.tmpl", &templateData{
+			FormData: r.PostForm,
+			FormErrors: errMap,
+		})
 		return
 	}
 

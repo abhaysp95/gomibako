@@ -210,6 +210,10 @@ footer > a {
 	transform: scale(1.15);
 }
 
+.error {
+	color: red;
+}
+
 /* h1 a {
 	color: #689d6a;
 	font-weight: bolder;
