@@ -2,17 +2,16 @@ package main
 
 import (
 	"html/template"
-	"net/url"
 	"path/filepath"
 	"time"
 
+	"github.com/abhaysp95/gomibako/pkg/forms"
 	"github.com/abhaysp95/gomibako/pkg/models"
 )
 
 type templateData struct {
 	CurrentYear int
-	FormData url.Values
-	FormErrors map[string]string
+	Form *forms.Form
 	Gomi *models.Gomi
 	GomiList []*models.Gomi
 }
