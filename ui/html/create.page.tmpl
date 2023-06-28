@@ -5,32 +5,36 @@
 {{define "body"}}
 <h2>Create a New Gomi</h2>
 <form class="create_gomi" action="/gomi/create" method="POST">
-	<div class="two_line create_gomi_title">
-		<label>Title</label>
-		{{with .FormErrors.title}}
-			<label class="error">{{.}}</label>
-		{{end}}
-		<input type="text" name="title" value='{{.FormData.Get "title"}}' />
-	</div>
-	<div class="two_line create_gomi_content">
-		<label>Content</label>
-		{{with .FormErrors.content}}
-			<label class="error">{{.}}</label>
-		{{end}}
-		<textarea name="content">{{.FormData.Get "content"}}</textarea>
-	</div>
-	<div class="create_gomi_expires">
-		<label>Delete in:</label>
-		{{with .FormErrors.expires}}
-			<label class="error">{{.}}</label>
-		{{end}}
-		{{$exp := or (.FormData.Get "expires") "365"}}
-		<input type="radio" name="expires" value="365" {{if (eq $exp "365")}}checked{{end}} />One year
-		<input type="radio" name="expires" value="7" {{if (eq $exp "7")}}checked{{end}}/>One week
-		<input type="radio" name="expires" value="1" {{if (eq $exp "1")}}checked{{end}}/>One day
-	</div>
-	<div class="create_gomi_submit">
-		<input type="submit" value="Publish Gomi">
-	</div>
+	{{with .Form}}
+		<div class="two_line create_gomi_title">
+			<label>Title</label>
+			{{with .ErrMap.Get "title"}}
+				<label class="error">{{.}}</label>
+			{{end}}
+			<input type="text" name="title" value='{{.Get "title"}}' />
+		</div>
+		<div class="two_line create_gomi_content">
+			<label>Content</label>
+			{{with .ErrMap.Get "content"}}
+				<label class="error">{{.}}</label>
+			{{end}}
+			<textarea name="content">{{.Get "content"}}</textarea>
+		</div>
+		<div class="create_gomi_expires">
+			<label>Delete in:</label>
+			{{with .ErrMap.Get "expires"}}
+				<label class="error">{{.}}</label>
+			{{end}}
+			{{$exp := or (.Get "expires") "365"}}
+			<input type="radio" name="expires" value="365" {{if (eq $exp "365")}}checked{{end}} />One year
+			<input type="radio" name="expires" value="7" {{if (eq $exp "7")}}checked{{end}}/>One week
+			<input type="radio" name="expires" value="1" {{if (eq $exp "1")}}checked{{end}}/>One day
+		</div>
+		<div class="create_gomi_submit">
+			<input type="submit" value="Publish Gomi">
+		</div>
+	{{else}}
+		<p class="error">Form not available</p>
+	{{end}}
 </form>
 {{end}}
