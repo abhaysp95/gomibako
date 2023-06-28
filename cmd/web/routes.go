@@ -9,10 +9,10 @@ import (
 func (app *application) routes() http.Handler {
 	r := chi.NewRouter()
 
-	r.Get("/", app.home)
-	r.Get("/gomi", app.showGomi)   // different from what
-	r.Get("/gomi/create", app.createGomiForm)
-	r.Post("/gomi/create", app.createGomi)
+	r.Get("/", app.session.Enable(http.HandlerFunc(app.home)).(http.HandlerFunc))
+	r.Get("/gomi", app.session.Enable(http.HandlerFunc(app.showGomi)).(http.HandlerFunc))   // different from what
+	r.Get("/gomi/create", app.session.Enable(http.HandlerFunc(app.createGomiForm)).(http.HandlerFunc))
+	r.Post("/gomi/create", app.session.Enable(http.HandlerFunc(app.createGomi)).(http.HandlerFunc))
 
 	// file server to serve static files
 	fileServer := http.FileServer(http.Dir("./ui/static"))
