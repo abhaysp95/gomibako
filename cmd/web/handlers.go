@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
-	"unicode/utf8"
 
 	// "text/template"
 
+	"github.com/abhaysp95/gomibako/pkg/forms"
 	"github.com/abhaysp95/gomibako/pkg/models"
 )
 
@@ -58,32 +57,18 @@ func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
 	content := r.PostForm.Get("content")
 	expires := r.PostForm.Get("expires")
 
-	errMap := make(map[string]string)
+	form := forms.New(r.PostForm)
 
-	// validation for title
-	if strings.TrimSpace(title) == "" {
-		errMap["title"] = "Title can't be empty"
-	} else if utf8.RuneCountInString(title) > 100 {
-		errMap["title"] = "Title length can't be more than 100 characters"
-	}
+	// validation for required
+	form.Required("title", "content")
+	form.MaxLength("title", 100)
+	form.PermittedValues("expires", "1", "7", "365")
 
-	// validation for content
-	if strings.TrimSpace(content) == "" {
-		errMap["content"] = "Content can't be empty"
-	}
-
-	// validation for expiry (just to be sure)
-	if strings.TrimSpace(expires) == "" {
-		errMap["expires"] = "Expiry duration can't be empty"
-	}
-
-	if len(errMap) > 0 {
-		app.errLog.Println("validation error", errMap)
+	if !form.Valid() {
+		app.errLog.Println("validation error", form.ErrMap)
 		app.renderTemplate(w, r, "create.page.tmpl", &templateData{
-			FormData: r.PostForm,
-			FormErrors: errMap,
+			Form: form,
 		})
-		return
 	}
 
 	id, err := app.gomi.Create(title, content, expires)
@@ -97,5 +82,8 @@ func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) createGomiForm(w http.ResponseWriter, r *http.Request) {
-	app.renderTemplate(w, r, "create.page.tmpl", nil)
+	form := forms.New(nil)
+	app.renderTemplate(w, r, "create.page.tmpl", &templateData{
+		Form: form,
+	})
 }
