@@ -8,9 +8,11 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/abhaysp95/gomibako/pkg/models/mysql"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/golangcollege/sessions"
 	"github.com/joho/godotenv"
 )
 
@@ -20,6 +22,7 @@ type application struct {
 	errLog *log.Logger
 	gomi *mysql.GomiModel
 	cache map[string]*template.Template
+	session *sessions.Session
 }
 
 func main() {
@@ -40,16 +43,24 @@ func main() {
 
 	var addr string
 	var dsn string
+	var session_secret string
 
 	flag.StringVar(&addr, "addr", "", "Provide addr to run server")
 	flag.StringVar(&dsn, "dsn", "", "Mariadb data source name")
+	flag.StringVar(&session_secret, "secret", "", "Provide secret for encrypting session (ideally to be 32bytes long)")
 	flag.Parse()
 
-	if (addr == "") {
+	if addr == "" {
 		addr = os.Getenv("ADDR")
 	}
-	if (dsn == "") {
+	if dsn == "" {
 		dsn = fmt.Sprintf("%s:%s@/%s", os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_DB"))
+	}
+	if session_secret == "" {
+		session_secret = os.Getenv("SESSION_SECRET")
+		if session_secret == "" {
+			session_secret = "pr0v1de-a-g000d-5ecret-k3y-va1ue"
+		}
 	}
 
 	if (addr == "" || dsn == "") {
@@ -63,6 +74,11 @@ func main() {
 
 	defer db.Close()
 	app.gomi.DB = db  // assign db pool
+
+	// create new session
+	session := sessions.New([]byte(session_secret))
+	session.Lifetime = 12 * time.Hour
+	app.session = session
 
 	// get the template cache and inject it in application
 	templateCache, err := newTemplateCache("./ui/html/")
