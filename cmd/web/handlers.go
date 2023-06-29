@@ -40,6 +40,8 @@ func (app *application) showGomi(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 	}
 
+	flash := app.session.PopString(r, "flash")
+
 	app.renderTemplate(w, r, "show.page.tmpl", &templateData{
 		Gomi: g,
 	})
@@ -77,6 +79,11 @@ func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 		return
 	}
+
+	// add key-value pair to session data, if there's no existing sesion for
+	// current user then a new session, empty session will be created by
+	// session middleware
+	app.session.Put(r, "flash", "Gomi created successfully")
 
 	// redirect to see the gomi
 	http.Redirect(w, r, fmt.Sprintf("/gomi?id=%d", id), http.StatusSeeOther)

@@ -12,6 +12,7 @@ import (
 type templateData struct {
 	CurrentYear int
 	Form *forms.Form
+	Flash string
 	Gomi *models.Gomi
 	GomiList []*models.Gomi
 }
