@@ -69,6 +69,7 @@ func (app *application) createGomi(w http.ResponseWriter, r *http.Request) {
 		app.renderTemplate(w, r, "create.page.tmpl", &templateData{
 			Form: form,
 		})
+		return
 	}
 
 	id, err := app.gomi.Create(title, content, expires)
