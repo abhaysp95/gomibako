@@ -3,6 +3,11 @@
 {{define "title"}}Gomi #{{.Gomi.Id}}{{end}}
 
 {{define "body"}}
+	{{with .Flash}}
+	<div class="flash flash_success">
+		<p>{{.}}</p>
+	</div>
+	{{end}}
 	{{with .Gomi}}
 		<div class="gomi">
 			<div class="metadata">
