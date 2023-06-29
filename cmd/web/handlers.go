@@ -43,6 +43,7 @@ func (app *application) showGomi(w http.ResponseWriter, r *http.Request) {
 	flash := app.session.PopString(r, "flash")
 
 	app.renderTemplate(w, r, "show.page.tmpl", &templateData{
+		Flash: flash,
 		Gomi: g,
 	})
 }
