@@ -57,7 +57,7 @@ nav {
 	margin-right: 16px;
 }
 
-nav a {
+nav > * a {
 	padding: 10px 50px;
 	text-decoration: none;
 	color: var(--gomi_light_orange);
@@ -66,7 +66,7 @@ nav a {
 	transition: transform 0.5s ease;
 }
 
-nav a:hover {
+nav > * a:hover {
 	transform: scale(1.25);
 }
 

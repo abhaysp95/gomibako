@@ -16,8 +16,18 @@
 				<!-- <h1><a href="/">GomiBako</a></h1> -->
 			</div>
 			<nav>
-				<a href="/">Home</a>
-				<a href="/gomi/create">Create Gomi</a>
+				<div>
+					<a href="/">Home</a>
+					<a href="/gomi/create">Create Gomi</a>
+				</div>
+				<!-- auth navigation -->
+				<div>
+					<a href="/user/signup">SignUp</a>
+					<a href="/user/login">Login</a>
+					<form method="POST" action="/user/logout">
+						<button>Logout</button>
+					</form>
+				</div>
 			</nav>
 		</header>
 		<section>
