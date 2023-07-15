@@ -93,3 +93,28 @@ func (app *application) createGomiForm(w http.ResponseWriter, r *http.Request) {
 		Form: form,
 	})
 }
+
+// handler to sign up new user
+func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
+	app.infoLog.Println("sign up user")
+}
+
+// handler to show sign up form
+func (app *application) signupUserForm(w http.ResponseWriter, r *http.Request) {
+	app.infoLog.Println("sign up user form")
+}
+
+// handler to login user
+func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
+	app.infoLog.Println("login user")
+}
+
+// handler to show login form
+func (app *application) loginUserForm(w http.ResponseWriter, r *http.Request) {
+	app.infoLog.Println("login user form")
+}
+
+// handler to logout user
+func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
+	app.infoLog.Println("logout user")
+}

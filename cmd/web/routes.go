@@ -14,6 +14,13 @@ func (app *application) routes() http.Handler {
 	r.Get("/gomi/create", app.session.Enable(http.HandlerFunc(app.createGomiForm)).(http.HandlerFunc))
 	r.Post("/gomi/create", app.session.Enable(http.HandlerFunc(app.createGomi)).(http.HandlerFunc))
 
+	// routes related to user signup/signin
+	r.Get("/user/signup", app.session.Enable(http.HandlerFunc(app.signupUserForm)).(http.HandlerFunc))
+	r.Post("/user/signup", app.session.Enable(http.HandlerFunc(app.signupUser)).(http.HandlerFunc))
+	r.Get("/user/login", app.session.Enable(http.HandlerFunc(app.loginUserForm)).(http.HandlerFunc))
+	r.Post("/user/login", app.session.Enable(http.HandlerFunc(app.loginUser)).(http.HandlerFunc))
+	r.Post("/user/logout", app.session.Enable(http.HandlerFunc(app.logoutUser)).(http.HandlerFunc))
+
 	// file server to serve static files
 	fileServer := http.FileServer(http.Dir("./ui/static"))
 
