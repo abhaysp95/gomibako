@@ -19,9 +19,10 @@ import (
 // holds application-wide dependencies
 type application struct {
 	infoLog *log.Logger
-	errLog *log.Logger
-	gomi *mysql.GomiModel
-	cache map[string]*template.Template
+	errLog  *log.Logger
+	gomi    *mysql.GomiModel
+	user    *mysql.UserModel
+	cache   map[string]*template.Template
 	session *sessions.Session
 }
 
@@ -29,10 +30,10 @@ func main() {
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errLog := log.New(os.Stdout, "ERR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
-	app := &application {
+	app := &application{
 		infoLog: infoLog,
-		errLog: errLog,
-		gomi: &mysql.GomiModel{  // dependency injection
+		errLog:  errLog,
+		gomi: &mysql.GomiModel{ // dependency injection
 			DB: nil,
 		},
 	}
@@ -63,7 +64,7 @@ func main() {
 		}
 	}
 
-	if (addr == "" || dsn == "") {
+	if addr == "" || dsn == "" {
 		app.errLog.Fatal("Provide initial server and db configuration to run application. See -h for more info")
 	}
 
@@ -73,7 +74,8 @@ func main() {
 	}
 
 	defer db.Close()
-	app.gomi.DB = db  // assign db pool
+	app.gomi = &mysql.GomiModel{DB: db} // assign db pool
+	app.user = &mysql.UserModel{DB: db}
 
 	// create new session
 	session := sessions.New([]byte(session_secret))
@@ -89,9 +91,9 @@ func main() {
 
 	mux := app.routes()
 
-	srv := http.Server {
-		Addr: addr,
-		Handler: mux,
+	srv := http.Server{
+		Addr:     addr,
+		Handler:  mux,
 		ErrorLog: errLog,
 	}
 
@@ -102,8 +104,8 @@ func main() {
 	}
 }
 
-func (app *application) openDB(dsn string) (*sql.DB, error)  {
-	db, err := sql.Open("mysql", dsn + "?parseTime=true")
+func (app *application) openDB(dsn string) (*sql.DB, error) {
+	db, err := sql.Open("mysql", dsn+"?parseTime=true")
 	if err != nil {
 		return nil, err
 	}
