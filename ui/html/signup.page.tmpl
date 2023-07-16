@@ -1,0 +1,36 @@
+{{template "base" .}}
+
+{{define "title"}}Signup{{end}}
+
+{{define "body"}}
+<form style='padding-top:30px' class="create_gomi" action="/user/signup" method="POST" novalidate>
+	{{with .Form}}
+		<div class="two_line create_gomi_content">
+			<label>Name:</label>
+			{{with .ErrMap.Get "name" }}
+				<label class="error">{{.}}</label>
+			{{end}}
+			<input type="text" name="name" value='{{.Get "name"}}' />
+		</div>
+		<div class="two_line create_gomi_content">
+			<label>Email:</label>
+			{{with .ErrMap.Get "email" }}
+				<label class="error">{{.}}</label>
+			{{end}}
+			<input type="text" name="email" value='{{.Get "email"}}' />
+		</div>
+		<div class="two_line create_gomi_content">
+			<label>Password:</label>
+			{{with .ErrMap.Get "password" }}
+				<label class="error">{{.}}</label>
+			{{end}}
+			<input type="password" name="passwd" value='{{.Get "passwd"}}' />
+		</div>
+		<div class="create_gomi_submit">
+			<input type="submit" value="SignUp" />
+		</div>
+	{{else}}
+		<p class="error">Signup form not available</p>
+	{{end}}
+</form>
+{{end}}
