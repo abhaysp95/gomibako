@@ -101,7 +101,10 @@ func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
 
 // handler to show sign up form
 func (app *application) signupUserForm(w http.ResponseWriter, r *http.Request) {
-	app.infoLog.Println("sign up user form")
+	form := forms.New(nil)
+	app.renderTemplate(w, r, "signup.page.tmpl", &templateData{
+		Form: form,
+	})
 }
 
 // handler to login user
@@ -111,7 +114,10 @@ func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
 
 // handler to show login form
 func (app *application) loginUserForm(w http.ResponseWriter, r *http.Request) {
-	app.infoLog.Println("login user form")
+	form := forms.New(nil)
+	app.renderTemplate(w, r, "login.page.tmpl", &templateData{
+		Form: form,
+	})
 }
 
 // handler to logout user
