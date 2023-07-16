@@ -96,7 +96,43 @@ func (app *application) createGomiForm(w http.ResponseWriter, r *http.Request) {
 
 // handler to sign up new user
 func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
-	app.infoLog.Println("sign up user")
+	err := r.ParseForm()
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	name := r.PostForm.Get("name")
+	email := r.PostForm.Get("email")
+	passwd := r.PostForm.Get("passwd")
+
+	form := forms.New(r.PostForm)
+	form.Required("title")
+	form.Required("email")
+	form.Required("passwd")
+	form.MinLength("passwd", 10)
+	form.MatchesPattern("email", forms.EmailRx)
+
+	if !form.Valid() {
+		app.errLog.Println("validation error", form.ErrMap)
+		app.renderTemplate(w, r, "signup.page.tmpl", &templateData{
+			Form: form,
+		})
+		return
+	}
+
+	err = app.user.Insert(name, email, passwd)
+	if err == models.ErrDuplicateEmail {
+		form.ErrMap.Add("email", err.Error())
+	} else if err == models.ErrInvalidCredentials {
+		form.ErrMap.Add("passwd", err.Error())
+	} else if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	// redirect to the home page
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 // handler to show sign up form
