@@ -124,6 +124,9 @@ func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
 	err = app.user.Insert(name, email, passwd)
 	if err == models.ErrDuplicateEmail {
 		form.ErrMap.Add("email", err.Error())
+		app.renderTemplate(w, r, "signup.page.tmpl", &templateData{
+			Form: form,
+		})
 	} else if err == models.ErrInvalidCredentials {
 		form.ErrMap.Add("passwd", err.Error())
 	} else if err != nil {
@@ -131,8 +134,10 @@ func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	app.session.Put(r, "flash", "Account created successfully. Please log in")
+
 	// redirect to the home page
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
 
 // handler to show sign up form
