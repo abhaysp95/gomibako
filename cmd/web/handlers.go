@@ -107,7 +107,7 @@ func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
 	passwd := r.PostForm.Get("passwd")
 
 	form := forms.New(r.PostForm)
-	form.Required("title")
+	form.Required("name")
 	form.Required("email")
 	form.Required("passwd")
 	form.MinLength("passwd", 10)
