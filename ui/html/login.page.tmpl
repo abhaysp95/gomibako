@@ -3,6 +3,11 @@
 {{define "title"}}Login{{end}}
 
 {{define "body"}}
+{{with .Flash}}
+<div class="flash flash-success">
+	<p>{{.}}</p>
+</div>
+{{end}}
 <form style='padding-top:30px' class="create_gomi" action="/user/login" method="POST" novalidate>
 	{{with .Form}}
 		<div class="two_line create_gomi_content">
