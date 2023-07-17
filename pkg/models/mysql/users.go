@@ -2,7 +2,6 @@ package mysql
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/abhaysp95/gomibako/pkg/models"
 	"github.com/go-sql-driver/mysql"
