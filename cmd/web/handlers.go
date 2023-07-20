@@ -150,7 +150,28 @@ func (app *application) signupUserForm(w http.ResponseWriter, r *http.Request) {
 
 // handler to login user
 func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
-	app.infoLog.Println("login user")
+	err := r.ParseForm()
+	if err != nil {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+
+	form := forms.New(r.PostForm)
+
+	_, err = app.user.Authenticate(form.Get("email"), form.Get("passwd"))
+	if err == models.ErrInvalidCredentials {
+		form.ErrMap.Add("generic", "Login failed. Email or Password is incorrect")
+		app.renderTemplate(w, r, "login.page.tmpl", &templateData{
+			Form: form,
+		})
+		return
+	}
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	http.Redirect(w, r, "/gomi/create", http.StatusSeeOther)
 }
 
 // handler to show login form
