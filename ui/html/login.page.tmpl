@@ -10,19 +10,18 @@
 {{end}}
 <form style='padding-top:30px' class="create_gomi" action="/user/login" method="POST" novalidate>
 	{{with .Form}}
+		{{with .ErrMap.Get "generic" }}
+		<div class="flash flash-error">
+			<p class="error">{{.}}</p>
+		</div>
+		{{end}}
 		<div class="two_line create_gomi_content">
 			<label>Email:</label>
-			{{with .ErrMap.Get "email" }}
-				<label class="error">{{.}}</label>
-			{{end}}
 			<input type="text" name="email" value='{{.Get "email"}}' />
 		</div>
 		<div class="two_line create_gomi_content">
 			<label>Password:</label>
-			{{with .ErrMap.Get "password" }}
-				<label class="error">{{.}}</label>
-			{{end}}
-			<input type="password" name="passwd" value='{{.Get "passwd"}}' />
+			<input type="password" name="passwd" />
 		</div>
 		<div class="create_gomi_submit">
 			<input type="submit" value="Login" />
