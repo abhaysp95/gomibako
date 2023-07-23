@@ -11,6 +11,9 @@
 	--gomi_dark_green: #98971a;
 	--gomi_dark_green_transparent: #98971a25;
 	--gomi_light_green: #b8bb26;
+	--gomi_light_red: #fb4934;
+	--gomi_dark_red: #cc241d;
+	--gomi_dark_red_transparent: #cc241d25;
 }
 
 html, body {
@@ -242,15 +245,24 @@ footer > a {
 }
 
 .error {
-	color: red;
+	color: var(--gomi_light_red);
 }
 
 .flash {
 	padding: 5px;
 	margin-bottom: 10px;
+}
+
+.flash-success {
 	color: var(--gomi_light_green);
 	background-color: var(--gomi_dark_green_transparent);
 	border: 3px solid var(--gomi_light_green);
+}
+
+.flash-error {
+	color: var(--gomi_light_red);
+	background-color: var(--gomi_dark_red_transparent);
+	border: 3px solid var(--gomi_light_red);
 }
 
 .flash p {
