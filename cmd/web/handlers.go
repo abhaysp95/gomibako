@@ -186,5 +186,8 @@ func (app *application) loginUserForm(w http.ResponseWriter, r *http.Request) {
 
 // handler to logout user
 func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
-	app.infoLog.Println("logout user")
+	app.session.Remove(r, "userId")
+	app.session.Put(r, "flash", "You've been successfully logged out")
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
