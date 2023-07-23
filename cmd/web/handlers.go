@@ -158,7 +158,7 @@ func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
 
 	form := forms.New(r.PostForm)
 
-	_, err = app.user.Authenticate(form.Get("email"), form.Get("passwd"))
+	id, err := app.user.Authenticate(form.Get("email"), form.Get("passwd"))
 	if err == models.ErrInvalidCredentials {
 		form.ErrMap.Add("generic", "Login failed. Email or Password is incorrect")
 		app.renderTemplate(w, r, "login.page.tmpl", &templateData{
@@ -170,6 +170,8 @@ func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 		return
 	}
+
+	app.session.Put(r, "userId", id)
 
 	http.Redirect(w, r, "/gomi/create", http.StatusSeeOther)
 }
