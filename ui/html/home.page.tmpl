@@ -3,6 +3,11 @@
 {{define "title"}}Home{{end}}
 
 {{define "body"}}
+	{{with .Flash}}
+	<div class="flash flash-success">
+		<p>{{.}}</p>
+	</div>
+	{{end}}
 	<h2>Latest Gomi List</h2>
 	<div class=".latest_gomi_list">
 		{{if .GomiList}}
